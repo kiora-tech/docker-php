@@ -4,9 +4,10 @@ ARG TIMEZONE=Europe/Paris
 MAINTAINER Stéphane RATHGEBER <stephane_rathgeber@hotmai.com>
 
 RUN apt-get update && apt-get install -y \
-    unzip \
+    pdftk \
+    zlib1g-dev \
     libicu-dev \
-    pdftk
+    libxml2-dev
 
 # Set timezone
 RUN ln -snf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && echo ${TIMEZONE} > /etc/timezone
@@ -14,9 +15,8 @@ RUN printf '[PHP]\ndate.timezone = "%s"\n', ${TIMEZONE} > /usr/local/etc/php/con
 RUN "date"
 
 # Type docker-php-ext-install to see available extensions
-RUN docker-php-ext-install pdo pdo_mysql \
-    && docker-php-ext-configure intl \
-    && docker-php-ext-install intl
+RUN docker-php-ext-configure intl \
+    && docker-php-ext-install pdo pdo_mysql intl zip soap bcmath
 
 # install xdebug
 RUN pecl install xdebug \
