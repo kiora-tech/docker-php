@@ -1,13 +1,15 @@
-FROM php:7.2-fpm
+FROM php:7.4.0RC6-fpm
 ARG TIMEZONE=Europe/Paris
 
 MAINTAINER Stéphane RATHGEBER <stephane_rathgeber@hotmai.com>
 
-RUN apt-get update && apt-get install -y \
+RUN mkdir -p /usr/share/man/man1 && \
+    apt-get update && apt-get install -y \
     pdftk \
     zlib1g-dev \
     libicu-dev \
-    libxml2-dev
+    libxml2-dev \
+    libzip-dev
 
 # Set timezone
 RUN ln -snf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && echo ${TIMEZONE} > /etc/timezone
