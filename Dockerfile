@@ -1,7 +1,7 @@
-FROM php:7.4.0RC6-fpm
+FROM php:7.4
 ARG TIMEZONE=Europe/Paris
 
-MAINTAINER Stéphane RATHGEBER <stephane_rathgeber@hotmai.com>
+MAINTAINER Stéphane RATHGEBER <stephane.kiora@gmail.com>
 
 RUN mkdir -p /usr/share/man/man1 && \
     apt-get update && apt-get install -y \
@@ -9,7 +9,10 @@ RUN mkdir -p /usr/share/man/man1 && \
     zlib1g-dev \
     libicu-dev \
     libxml2-dev \
-    libzip-dev
+    libzip-dev \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libpng-dev
 
 # Set timezone
 RUN ln -snf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && echo ${TIMEZONE} > /etc/timezone
@@ -18,7 +21,9 @@ RUN "date"
 
 # Type docker-php-ext-install to see available extensions
 RUN docker-php-ext-configure intl \
-    && docker-php-ext-install pdo pdo_mysql intl zip soap bcmath
+    && docker-php-ext-install pdo pdo_mysql intl zip soap bcmath\
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) gd
 
 # install xdebug
 RUN pecl install xdebug \
