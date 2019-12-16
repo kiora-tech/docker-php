@@ -12,7 +12,8 @@ RUN mkdir -p /usr/share/man/man1 && \
     libzip-dev \
     libfreetype6-dev \
     libjpeg62-turbo-dev \
-    libpng-dev
+    libpng-dev \
+    libmemcached-dev
 
 # Set timezone
 RUN ln -snf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && echo ${TIMEZONE} > /etc/timezone
@@ -23,7 +24,9 @@ RUN "date"
 RUN docker-php-ext-configure intl \
     && docker-php-ext-install pdo pdo_mysql intl zip soap bcmath\
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd
+    && docker-php-ext-install -j$(nproc) gd \
+    && pecl install memcached \
+    && docker-php-ext-enable memcached
 
 # install xdebug
 RUN pecl install xdebug \
