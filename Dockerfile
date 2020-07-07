@@ -3,18 +3,15 @@ ARG TIMEZONE=Europe/Paris
 
 MAINTAINER Stéphane RATHGEBER <stephane.kiora@gmail.com>
 
+
+ADD https://raw.githubusercontent.com/mlocati/docker-php-extension-installer/master/install-php-extensions /usr/local/bin/
+
+RUN chmod uga+x /usr/local/bin/install-php-extensions && sync
+    
+
 RUN mkdir -p /usr/share/man/man1 && \
     apt-get update && apt-get install -y \
     pdftk \
-    zlib1g-dev \
-    libicu-dev \
-    libxml2-dev \
-    libzip-dev \
-    libfreetype6-dev \
-    libjpeg62-turbo-dev \
-    libpng-dev \
-    libmemcached-dev \
-    libpq-dev \
     wget \
     ghostscript \
     xfonts-base \
@@ -26,19 +23,22 @@ RUN ln -snf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && echo ${TIMEZONE} >
  && printf '[PHP]\ndate.timezone = "%s"\n', ${TIMEZONE} > /usr/local/etc/php/conf.d/tzone.ini \
  && "date"
 
-# Type docker-php-ext-install to see available extensions
-RUN docker-php-ext-configure intl \
-    && docker-php-ext-install pdo pdo_mysql intl zip soap bcmath pdo_pgsql pgsql \
-    && docker-php-ext-install -j$(nproc) gd \
-    && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
-    && docker-php-ext-configure gd \
-    && pecl install memcached \
-    && docker-php-ext-enable memcached
+RUN install-php-extensions \
+    bcmath \
+    gd \
+    intl \
+    memcached\
+    pdo \
+    pdo_mysql \
+    pdo_pgsql \
+    pgsql \
+    soap \
+    zip \
+    xdebug
+
 
 # install xdebug
-RUN pecl install xdebug \
-    && docker-php-ext-enable xdebug \
-    && echo "error_reporting = E_ALL" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+RUN echo "error_reporting = E_ALL" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "display_startup_errors = On" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "display_errors = On" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "xdebug.remote_enable=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
