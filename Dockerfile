@@ -1,13 +1,9 @@
 FROM php:7.4-fpm
 ARG TIMEZONE=Europe/Paris
 
-MAINTAINER Stéphane RATHGEBER <stephane.kiora@gmail.com>
-
-
 ADD https://raw.githubusercontent.com/mlocati/docker-php-extension-installer/master/install-php-extensions /usr/local/bin/
 
 RUN chmod uga+x /usr/local/bin/install-php-extensions && sync
-    
 
 RUN mkdir -p /usr/share/man/man1 && \
     apt-get update && apt-get install -y \
@@ -34,8 +30,9 @@ RUN install-php-extensions \
     pgsql \
     soap \
     zip \
-    xdebug
-
+    xdebug \
+    http \
+    amqp
 
 # install xdebug
 RUN echo "error_reporting = E_ALL" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \

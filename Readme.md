@@ -4,19 +4,21 @@ PHP dev Dokerfile
 
 Extension:
 ----------
- * pdo 
- * pdo_mysql
- * pdo_pgsql 
- * pgsql
- * intl 
- * zip 
- * soap 
- * bcmath
- * gd
- * memcached
+* bcmath
+* gd
+* intl
+* memcache
+* pdo
+* pdo_mysql
+* pdo_pgsql
+* pgsql
+* soap
+* zip
+* xdebug
+* http
+* amqp
  
  Aditional:
  ---------
-  * Xdebug
   * pdftk
   * wkhtmltopdf
