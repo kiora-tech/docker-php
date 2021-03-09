@@ -32,7 +32,8 @@ RUN install-php-extensions \
     zip \
     xdebug \
     http \
-    amqp
+    amqp \
+    redis
 
 # install xdebug
 RUN echo "error_reporting = E_ALL" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
