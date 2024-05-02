@@ -1,4 +1,4 @@
-FROM php:7.4-fpm
+FROM php:8.2-fpm
 ARG TIMEZONE=Europe/Paris
 
 ADD https://raw.githubusercontent.com/mlocati/docker-php-extension-installer/master/install-php-extensions /usr/local/bin/
@@ -12,7 +12,8 @@ RUN mkdir -p /usr/share/man/man1 && \
     ghostscript \
     xfonts-base \
     xfonts-75dpi \
-    fontconfig
+    fontconfig \
+    wkhtmltopdf 
 
 # Set timezone
 RUN ln -snf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && echo ${TIMEZONE} > /etc/timezone \
@@ -43,11 +44,6 @@ RUN echo "error_reporting = E_ALL" >> /usr/local/etc/php/conf.d/docker-php-ext-x
     && echo "xdebug.remote_connect_back=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "xdebug.idekey=\"PHPSTORM\"" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "xdebug.remote_port=9001" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-
-RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.stretch_amd64.deb \
- && dpkg -i wkhtmltox_0.12.5-1.stretch_amd64.deb \
- && apt install -y -f \
- && rm wkhtmltox_0.12.5-1.stretch_amd64.deb
 
 #https://blog.rkl.io/en/blog/docker-based-php-7-symfony-4-development-environment
 # disbale xdebug for composer
